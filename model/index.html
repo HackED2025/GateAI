@@ -6,7 +6,7 @@
     <title>Pose Detection AI</title>
 </head>
 <body>
-    <h2>AI-Powered Pose Model</h2>
+    <h2>DANGER DETECTION</h2>
     <button onclick="init()">Start</button>
     <canvas id="canvas"></canvas>
     <div id="label-container"></div>
@@ -14,26 +14,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
     <script>
-        const URL = "./";  // Make sure model files are in the same directory
+        // 🔹 Replace this with your Teachable Machine model URL
+        const URL = "./my_model/";
         let model, webcam, ctx, labelContainer, maxPredictions;
 
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
 
+            // Load the model
             model = await tmPose.load(modelURL, metadataURL);
             maxPredictions = model.getTotalClasses();
 
-            webcam = new tmPose.Webcam(300, 300, true); // Adjust webcam size
+            // Setup Webcam
+            const size = 400;  // Change resolution if needed
+            webcam = new tmPose.Webcam(size, size, true); // width, height, flip
             await webcam.setup();
             await webcam.play();
             window.requestAnimationFrame(loop);
 
+            // Attach to HTML elements
             const canvas = document.getElementById("canvas");
-            canvas.width = 300;
-            canvas.height = 300;
+            canvas.width = size;
+            canvas.height = size;
             ctx = canvas.getContext("2d");
-
             labelContainer = document.getElementById("label-container");
             for (let i = 0; i < maxPredictions; i++) {
                 labelContainer.appendChild(document.createElement("div"));
@@ -41,19 +45,25 @@
         }
 
         async function loop() {
-            webcam.update();
+            webcam.update(); // Update the webcam frame
             await predict();
             window.requestAnimationFrame(loop);
         }
 
         async function predict() {
+            // Run pose estimation
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+
+            // Run classification model
             const prediction = await model.predict(posenetOutput);
 
             for (let i = 0; i < maxPredictions; i++) {
-                labelContainer.childNodes[i].innerHTML =
-                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                const classPrediction =
+                    prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(2) + "%";
+                labelContainer.childNodes[i].innerHTML = classPrediction;
             }
+
+            // Draw the pose on the canvas
             drawPose(pose);
         }
 
@@ -61,8 +71,9 @@
             if (webcam.canvas) {
                 ctx.drawImage(webcam.canvas, 0, 0);
                 if (pose) {
-                    tmPose.drawKeypoints(pose.keypoints, 0.5, ctx);
-                    tmPose.drawSkeleton(pose.keypoints, 0.5, ctx);
+                    const minPartConfidence = 0.5;
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
                 }
             }
         }
