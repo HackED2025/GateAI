@@ -3,6 +3,9 @@ import face_recognition
 import pickle
 import numpy as np
 
+def unlock(faceRecognized):
+        return faceRecognized
+
 def facial_recognition():
         # load camera (0 is the first camera)
         cap = cv2.VideoCapture(0)
@@ -41,8 +44,10 @@ def facial_recognition():
                         #print("match index", matchIndex)
 
                         faceRecognized = False
+                        unlock(faceRecognized)
                         if matches[matchIndex]:
                                 faceRecognized = True
+                                unlock(faceRecognized)
                                 print("known face detected:", peopleList[matchIndex])
                                 #once its true you should send a message to open the lock or return true??
                         else:
@@ -58,6 +63,5 @@ def facial_recognition():
         cap.release()
         cv2.destroyAllWindows()
 
-        return faceRecognized
 
 facial_recognition()
