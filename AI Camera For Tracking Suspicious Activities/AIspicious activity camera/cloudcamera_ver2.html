@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>AI Suspicious Activity Detector</h1>
+<p>Recognizing Movements</p>
+<p id="output">Normal Activity</p>
+
+<div><canvas id="canvas"></canvas></div>
+<div id="label-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+<script type="text/javascript">
+    const URL = "./";
+    let model, webcam, ctx, labelContainer, maxPredictions;
+    const labels = ["Walking", "Shooting", "Knife", "Stealing", "Walking Away"];
+
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmPose.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const size = 300;
+        webcam = new tmPose.Webcam(size, size, true);
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        const canvas = document.getElementById("canvas");
+        canvas.width = size; canvas.height = size;
+        ctx = canvas.getContext("2d");
+        labelContainer = document.getElementById("label-container");
+        labelContainer.innerHTML = "";
+
+        for (let i = 0; i < maxPredictions; i++) {
+            let bar = document.createElement("div");
+            bar.style.height = "20px";
+            bar.style.margin = "5px";
+            bar.style.width = "0%";
+            bar.style.backgroundColor = "blue";
+            bar.innerText = labels[i];
+            bar.style.color = "white";
+            bar.style.textAlign = "center";
+            labelContainer.appendChild(bar);
+        }
+    }
+
+    async function loop(timestamp) {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+        const prediction = await model.predict(posenetOutput);
+
+        let highestProb = 0;
+        let mostLikelyAction = "Normal Activity";
+        let isSuspicious = false;
+
+        for (let i = 0; i < maxPredictions; i++) {
+            let prob = prediction[i].probability.toFixed(2);
+            let bar = labelContainer.children[i];
+            bar.style.width = (prob * 100) + "%";
+            
+            if (prob > highestProb) {
+                highestProb = prob;
+                mostLikelyAction = labels[i];
+            }
+            
+            if ((i === 1 || i === 2 || i === 3) && prob >= 0.98) {
+                isSuspicious = true;
+            }
+        }
+
+        if (isSuspicious) {
+            document.getElementById("output").innerText = "⚠️ Suspicious Activity Detected!";
+            var audio = new Audio("https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3");
+            audio.play();
+        } else {
+            document.getElementById("output").innerText = "✅ " + mostLikelyAction;
+        }
+    }
+
+    // Auto-start the model
+    init();
+</script>
+
+</body>
+</html>
