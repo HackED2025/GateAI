@@ -31,6 +31,8 @@ void loop() {
             Serial.println("🔓 Unlocking Door");
 
             digitalWrite(redPin, LOW);   // 🔴 Turn OFF Red LED
+            Serial.println("green Systenjfnjkfnjksnd");
+
             digitalWrite(greenPin, HIGH); // 🟢 Turn ON Green LED
             myStepper.step(stepsPerRevolution / 2);  // Rotate to unlock
             
