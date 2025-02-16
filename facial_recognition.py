@@ -12,11 +12,11 @@ cap.set(4, 720)
 print("loading encoded file...")
 file = open("encode_file.p", 'rb')
 encodeListToPerson = pickle.load(file)
+print(encodeListToPerson)
 file.close()
-encodeListPerson, Person = encodeListToPerson 
-print(Person)
+encodedPeopleList, peopleList = encodeListToPerson 
+print(peopleList)
 print("Encoded file loaded")
-
 
 
 while True: 
@@ -30,19 +30,17 @@ while True:
         faceCurFrame = face_recognition.face_locations(imgS)
         encodeCurFrame = face_recognition.face_encodings(imgS, faceCurFrame)
 
-        print(encodeCurFrame, faceCurFrame)
-
         for encodedFace, faceLocation in zip(encodeCurFrame, faceCurFrame):
-            matches = face_recognition.compare_faces(encodeListPerson,encodedFace )
-            faceDistance = face_recognition.face_distance(encodeListPerson, encodedFace)
-            #print("matches", matches)
-            #print("face Distance", faceDistance)
+            matches = face_recognition.compare_faces(encodedPeopleList, encodedFace)
+            faceDistance = face_recognition.face_distance(encodedPeopleList, encodedFace)
+            print("matches", matches)
+            print("face Distance", faceDistance)
 
-            #matchIndex = np.argmin(faceDistance)
-            #print("match index", matchIndex)
+            matchIndex = np.argmin(faceDistance)
+            print("match index", matchIndex)
 
-            if matches[0] == np.True_:
-                   print("known face detected")
+            if matches[matchIndex]:
+                   print("known face detected:", peopleList[matchIndex])
             
                    
 
