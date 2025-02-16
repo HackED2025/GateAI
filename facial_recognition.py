@@ -5,17 +5,22 @@ import numpy as np
 import serial
 import time
 
-# 🔹 Connect to Arduino via Serial (Update the port!)
+# track the last unlock time
+LASTUNLOCKTIME = 0
+TIMEDELAY = 300  # Delay in seconds (5 minutes)
+
+# connect to Arduino via Serial (Update the port!)
 arduino = serial.Serial('/dev/cu.usbmodem1201', 9600)  # Mac/Linux
 # arduino = serial.Serial('COM3', 9600)  # Windows users, change COM port
-
 time.sleep(2)  # Wait for Arduino to initialize
 
-def unlock(faceRecognized):
-    """Function to handle unlocking mechanism."""
-    if faceRecognized:
-        print("🔹 Sending 'U' to Arduino (Unlocking)")
-        arduino.write(b'U')  # 🔓 Send Unlock Signal
+
+def unlock():
+    """
+    Function to handle unlocking mechanism.
+    """
+    print("🔹 Sending 'U' to Arduino (Unlocking)")
+    arduino.write(b'U')  # 🔓 Send Unlock Signal
 
 def facial_recognition():
     cap = cv2.VideoCapture(0)
@@ -47,7 +52,10 @@ def facial_recognition():
             if matches[matchIndex]:  # ✅ Face Recognized
                 faceRecognized = True
                 print(f"✅ Known face detected: {peopleList[matchIndex]}")
-                unlock(faceRecognized)  # 🔓 Unlock door
+                global LASTUNLOCKTIME
+                currentTime = time.time()
+                if currentTime - LASTUNLOCKTIME > TIMEDELAY:
+                        unlock()  # 🔓 Unlock door
             else:
                 print("❌ No authorized face detected")
 
