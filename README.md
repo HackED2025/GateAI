@@ -26,27 +26,6 @@ GateAI addresses the critical need for proactive threat detection in public spac
 ## Step 3: Threat Analysis and Response
 - Uses AI to analyze detected faces and gestures to assess potential threats.
 - Provides immediate alerts to security personnel through the web interface.
-# Setup Instructions
-1. Prerequisites
-- Ensure the following are installed:
-  - Python 3.9+
-  - Node.js 16+
-  - Flask for backend
-  - Arduino IDE for hardware integration
-Step 2: Signal Processing
-2. Backend Setup
-```
-git clone https://github.com/HackED2025/GateAI.git
-cd GateAI/backend
-pip install -r requirements.txt
-python app.py
-```
-3. Frontend Setup
-```
-cd ../frontend
-npm install
-npm run dev
-```
 # Future Enhancements
 - Enhanced AI Models – Improve accuracy for better threat detection.
 - Additional Hardware Support – Integrate more sensors and devices.
