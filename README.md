@@ -35,14 +35,14 @@ GateAI addresses the critical need for proactive threat detection in public spac
   - Arduino IDE for hardware integration
 Step 2: Signal Processing
 2. Backend Setup
-git clone https://github.com/HackED2025/GateAI.git
+'''git clone https://github.com/HackED2025/GateAI.git
 cd GateAI/backend
 pip install -r requirements.txt
-python app.py
+python app.py'''
 3. Frontend Setup
-cd ../frontend
+'''cd ../frontend
 npm install
-npm run dev
+npm run dev'''
 # Future Enhancements
 - Enhanced AI Models – Improve accuracy for better threat detection.
 - Additional Hardware Support – Integrate more sensors and devices.
