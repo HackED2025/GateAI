@@ -1,35 +1,195 @@
-{% extends "base.html" %} {% block title %}Dashboard{% endblock %}
+{% extends "base.html" %}
 
-{% block content %} 
+{% block title %}Dashboard{% endblock %}
 
-<h1>Welcome, {{ user.firstName }}</h1>
+{% block content %}
+<head>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c8eceb;
+            color: #c8eceb;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            color: #1e81b0;
 
-  <body>
-    <div class="container">
-      <h1 align="center">Upload Image</h1>
-      <form method="POST" action="/upload" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="file">Choose an image</label>
-          <input
-            type="file"
-            class="form-control-file"
-            id="file"
-            name="file"
-            accept="image/*"
-          />
+        }
+
+        /* Two-column layout */
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            gap: 20px; /* Space between columns */
+        }
+
+        /* Video container styling */
+        .video-container {
+            flex: 1;
+            max-width: 60%;
+            border: 2px solid #c8eceb;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #video-stream {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Log container styling */
+        .log-container {
+            flex: 1;
+            max-width: 35%;
+            background-color: #fff;
+            color: #1e81b0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .log-container h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .upload-container {
+            flex: 1;
+            max-width: 35%;
+            background-color: #fff;
+            color: #1e81b0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control-file {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        /* Uploaded image styling */
+        .uploaded-image {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .uploaded-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<br/>
+<body>
+    <h1 style="font-weight: bold; margin-top: 3%;">Welcome, {{ user.firstName }}</h1>
+
+    <!-- Dashboard container with two columns -->
+    <p style ="font-size: 20px;">Live Video Feed:</p>
+    <div class="dashboard-container">
+        <!-- Video container (left) -->
+        <div class="video-container">
+            <img id="video-stream" src="{{ url_for('views.video_feed') }}" alt="Video Stream">
         </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
-      </form>
 
-      <!-- Display uploaded image -->
-      {% if image_url %}
-      <div class="mt-4">
-        <h3>Uploaded Image:</h3>
-        <img src="{{ image_url }}" alt="Uploaded Image" class="img-fluid" />
-      </div>
-      {% endif %}
+        <!-- Log container (right) -->
+        <div class="log-container">
+            <h2>Face Detection Log</h2>
+            {% if log %}
+                <div>
+                    {% for entry in log %}
+                        <div class="log-entry">{{ entry }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No face detections yet.</p>
+            {% endif %}
+        </div>
     </div>
-  </body>
 
+    <!-- Upload form container (optional, right side) -->
+    <div class="upload-container">
+        <h1>Upload Image</h1>
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose an image</label>
+                <input
+                    type="file"
+                    class="form-control-file"
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <!-- Display uploaded image -->
+        {% if image_url %}
+        <div class="uploaded-image">
+            <h3>Uploaded Image:</h3>
+            <img src="{{ image_url }}" alt="Uploaded Image">
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+<script>
+    // Refresh the video stream when the page becomes visible
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) {
+            let video = document.getElementById("video-stream");
+            video.src = "{{ url_for('views.video_feed') }}" + "?t=" + new Date().getTime();
+        }
+    });
+</script>
 
 {% endblock %}
