@@ -4,7 +4,7 @@ GateAI addresses the critical need for proactive threat detection in public spac
 # Features
 1. Threat Detection
 
--Identifies suspicious gestures and facial expressions using AI-powered recognition.
+- Identifies suspicious gestures and facial expressions using AI-powered recognition.
 
 2. Real-Time Processing
 
