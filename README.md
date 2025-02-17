@@ -33,7 +33,7 @@ GateAI addresses the critical need for proactive threat detection in public spac
 - Notification Alerts – Add a system to send alerts for suspicious activities to security personnel.
 # Acknowledgements
 - Libraries – TensorFlow, OpenCV, SQLAlchemy, Arduino.
-- Teachable Machine – Used (https://teachablemachine.withgoogle.com/train/pose )for gesture recognition.
+- Teachable Machine – Used (https://teachablemachine.withgoogle.com/train/pose) for gesture recognition.
 - Arduino Community – For open-source hardware support.
 - HackED 2025 Organizers – For fostering innovation and collaboration during the event.
 - Team Members – For their dedication, creativity, and teamwork in bringing GateAI to life.
