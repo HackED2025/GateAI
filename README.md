@@ -36,4 +36,6 @@ GateAI addresses the critical need for proactive threat detection in public spac
 - Arduino Community – For open-source hardware support.
 - HackED 2025 Organizers – For fostering innovation and collaboration during the event.
 - Team Members – For their dedication, creativity, and teamwork in bringing GateAI to life.
+# License
+This project is licensed under the MIT License.
 
