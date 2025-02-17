@@ -1,5 +1,5 @@
 from flask import Flask, Response
-from facial_recognition import facial_recognition  # Import from the separate file
+from facial_recognition import facial_recognition
 
 app = Flask(__name__)
 
@@ -10,8 +10,8 @@ def index():
     <html lang="en">
       <head><title>Live Camera Feed</title></head>
       <body>
-        <h1>Live Camera Feed with Facial and Gesture Recognition</h1>
-        <img src="/video_feed" alt="Video Feed">
+        <h1>Live Camera Feed</h1>
+        <img src="/video_feed">
       </body>
     </html>
     '''
@@ -21,5 +21,4 @@ def video_feed():
     return Response(facial_recognition(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    print("Starting Flask server...")
     app.run(debug=True)
