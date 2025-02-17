@@ -53,10 +53,10 @@ npm run dev
 - Database for Known People – Implement a database to store and manage known individuals.
 - Notification Alerts – Add a system to send alerts for suspicious activities to security personnel.
 # Acknowledgements
-Libraries – TensorFlow, OpenCV, SQLAlchemy, Arduino.
+- Libraries – TensorFlow, OpenCV, SQLAlchemy, Arduino.
 HackED 2025 – For providing the platform and resources to develop GateAI.
-OpenAI – For AI model inspiration and tools.
+- OpenAI – For AI model inspiration and tools.
 Arduino Community – For open-source hardware support.
-HackED 2025 Organizers – For fostering innovation and collaboration during the event.
-Team Members – For their dedication, creativity, and teamwork in bringing GateAI to life.
+- HackED 2025 Organizers – For fostering innovation and collaboration during the event.
+- Team Members – For their dedication, creativity, and teamwork in bringing GateAI to life.
 
