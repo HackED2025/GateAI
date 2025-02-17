@@ -31,11 +31,8 @@ void loop() {
             Serial.println("🔓 Unlocking Door");
 
             digitalWrite(redPin, LOW);   // 🔴 Turn OFF Red LED
-            Serial.println("green Systenjfnjkfnjksnd");
-
             digitalWrite(greenPin, HIGH); // 🟢 Turn ON Green LED
             myStepper.step(stepsPerRevolution / 2);  // Rotate to unlock
-            
             delay(5000);  // ⏳ Keep unlocked for 5 sec
             
             // **🔒 Auto-Locking After 5 Seconds**
