@@ -13,6 +13,10 @@
             margin: 0;
             padding: 0;
         }
+        h2 {
+            color: #1e81b0;
+
+        }
 
         /* Two-column layout */
         .dashboard-container {
@@ -43,6 +47,7 @@
             flex: 1;
             max-width: 35%;
             background-color: #fff;
+            color: #1e81b0;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -66,6 +71,7 @@
             flex: 1;
             max-width: 35%;
             background-color: #fff;
+            color: #1e81b0;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -122,15 +128,15 @@
         }
     </style>
 </head>
-
+<br/>
 <body>
     <h1 style="font-weight: bold; margin-top: 3%;">Welcome, {{ user.firstName }}</h1>
 
     <!-- Dashboard container with two columns -->
+    <p style ="font-size: 20px;">Live Video Feed:</p>
     <div class="dashboard-container">
         <!-- Video container (left) -->
         <div class="video-container">
-            <h1>Live Video Feed</h1>
             <img id="video-stream" src="{{ url_for('views.video_feed') }}" alt="Video Stream">
         </div>
 
