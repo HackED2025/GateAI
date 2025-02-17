@@ -8,19 +8,19 @@ import time
 # track the last unlock time
 LASTUNLOCKTIME = 0
 TIMEDELAY = 300  # Delay in seconds (5 minutes)
-
+'''
 # connect to Arduino via Serial (Update the port!)
 arduino = serial.Serial('/dev/cu.usbmodem1201', 9600)  # Mac/Linux
 # arduino = serial.Serial('COM3', 9600)  # Windows users, change COM port
 time.sleep(2)  # Wait for Arduino to initialize
-
+'''
 
 def unlock():
     """
     Function to handle unlocking mechanism.
     """
     print("🔹 Sending 'U' to Arduino (Unlocking)")
-    arduino.write(b'U')  # 🔓 Send Unlock Signal
+    #arduino.write(b'U')  # 🔓 Send Unlock Signal
 
 def facial_recognition():
     cap = cv2.VideoCapture(0)
@@ -38,6 +38,9 @@ def facial_recognition():
         result, img = cap.read()
         imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)
         imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
+
+        if not result:
+            break
 
         faceCurFrame = face_recognition.face_locations(imgS)
         encodeCurFrame = face_recognition.face_encodings(imgS, faceCurFrame)
@@ -59,11 +62,10 @@ def facial_recognition():
             else:
                 print("❌ No authorized face detected")
 
-        key = cv2.waitKey(1)
-        if key == 27:  # Press "Esc" to exit
-            break
+        ret, buffer = cv2.imencode('.jpg', img)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
     cap.release()
-    cv2.destroyAllWindows()
 
 facial_recognition()
